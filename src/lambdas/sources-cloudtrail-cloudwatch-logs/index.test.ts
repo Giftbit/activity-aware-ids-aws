@@ -1,6 +1,6 @@
 import * as chai from "chai";
-import {Message} from "../../common/Message"
-import * as cloudTrailSource from "./index"
+import {Message} from "../../common/Message";
+import * as cloudTrailSource from "./index";
 
 const testObject = {
     l1Primative: "l1primative",

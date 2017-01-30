@@ -1,6 +1,6 @@
 import * as chai from "chai";
-import {MessageSender} from "./MessageSender"
-import {Message} from "./Message"
+import {MessageSender} from "./MessageSender";
+import {Message} from "./Message";
 
 describe("MessageSender", () => {
     describe("preparePublishInput()", () => {
@@ -25,7 +25,7 @@ describe("MessageSender", () => {
             const expectedPublishInput = {
                 Message: "{\"subject\":\"Some subject\",\"fields\":[{\"key\":\"aKey\",\"value\":\"SomeValue\"}],\"metadata\":{\"sourceName\":\"ASource\",\"sourceIconUrl\":\"Some url\"}}",
                 TopicArn: "some:fake:arn"
-            }
+            };
 
             chai.assert.deepEqual(publishInput, expectedPublishInput);
         });

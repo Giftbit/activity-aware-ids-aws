@@ -1,15 +1,15 @@
 import "babel-polyfill";
 
-import * as url from 'url';
-import * as AWS from 'aws-sdk';
-import * as https from 'https';
+import * as url from "url";
+import * as AWS from "aws-sdk";
+import * as https from "https";
 import * as awslambda from "aws-lambda";
-import {Message, Field} from '../../common/Message';
-import {SNSEvent} from '../../common/LambdaEvents';
+import {Message, Field} from "../../common/Message";
+import {SNSEvent} from "../../common/LambdaEvents";
 import {Url} from "url";
 import {decodeMessageFromSNSEvent} from "../../common/MessageDecoder";
 
-const color = 'danger';
+const color = "danger";
 
 const encryptedWebhookURL = process.env.SLACK_WEBHOOK_URL;
 let decodedWebhookURL = null;
@@ -29,15 +29,15 @@ export async function handlerAsync(event: SNSEvent): Promise<string> {
     const message = decodeMessageFromSNSEvent(event);
 
     const webhookURL = await getWebhookURL();
-    console.log("WebhookURL:",webhookURL);
+    console.log("WebhookURL:", webhookURL);
     const body = preparePostBody(message);
     await sendToSlack(body, webhookURL);
 
-    return "Payload sent"
+    return "Payload sent";
 }
 
 export function preparePostBody(message: Message): any {
-    console.log("preparePostBody, payload:",JSON.stringify(message));
+    console.log("preparePostBody, payload:", JSON.stringify(message));
 
     const slackText = message.fields.map(field => field.key + ": " + field.value).join("\n");
 
@@ -50,30 +50,29 @@ export function preparePostBody(message: Message): any {
 
     if (message.metadata) {
         if (message.metadata.sourceName) {
-            slackBody.username = message.metadata.sourceName
+            slackBody.username = message.metadata.sourceName;
         }
 
         if (message.metadata.sourceIconUrl) {
-            slackBody.icon_url= message.metadata.sourceIconUrl
+            slackBody.icon_url = message.metadata.sourceIconUrl;
         }
     }
-
 
     return slackBody;
 }
 
 async function sendToSlack(body: any, webhookURL: Url): Promise<void> {
-    console.log("postData:",body);
+    console.log("postData:", body);
 
     const content = JSON.stringify(body);
 
     const postOptions = {
         host: webhookURL.host,
         path: webhookURL.path,
-        method: 'POST',
+        method: "POST",
         headers: {
-            'Content-Type': 'application/json',
-            'Content-Length': Buffer.byteLength(content)
+            "Content-Type": "application/json",
+            "Content-Length": Buffer.byteLength(content)
         }
     };
 
@@ -105,9 +104,9 @@ async function getWebhookURL(): Promise<Url> {
         // Decrypt code should run once and variables stored outside of the function
         // handler so that these are decrypted once per container
         const kms = new AWS.KMS();
-        const kmsResponse = await kms.decrypt({CiphertextBlob: new Buffer(encryptedWebhookURL, 'base64')}).promise();
+        const kmsResponse = await kms.decrypt({CiphertextBlob: new Buffer(encryptedWebhookURL, "base64")}).promise();
 
-        const webhookPlaintext = (kmsResponse.Plaintext as Buffer).toString('ascii');
+        const webhookPlaintext = (kmsResponse.Plaintext as Buffer).toString("ascii");
         const webhookURL = url.parse(webhookPlaintext);
 
         if (! (webhookURL && webhookURL.protocol &&  webhookURL.protocol.startsWith("https"))) {

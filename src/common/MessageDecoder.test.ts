@@ -1,5 +1,5 @@
 import * as chai from "chai";
-import * as messageDecoder from "./MessageDecoder"
+import * as messageDecoder from "./MessageDecoder";
 import {SNSEvent} from "./LambdaEvents";
 import {Message} from "./Message";
 

@@ -1,5 +1,5 @@
 import * as chai from "chai";
-import {Message} from "./Message"
+import {Message} from "./Message";
 
 describe("Message", () => {
     describe("constructor()", () => {
@@ -69,8 +69,8 @@ describe("Message", () => {
                 ]
             };
 
-            const instantation = () => { new Message(pojo);};
-            chai.expect(instantation).to.throw(Error, "Missing Required Parameter 'subject'");
+            const instantiation = () => { new Message(pojo); };
+            chai.expect(instantiation).to.throw(Error, "Missing Required Parameter 'subject'");
         });
 
         it("Throws an error if the fields is missing", () => {
@@ -78,7 +78,7 @@ describe("Message", () => {
                 subject: "Some subject"
             };
 
-            const instantation = () => { new Message(pojo);};
+            const instantation = () => { new Message(pojo); };
             chai.expect(instantation).to.throw(Error, "Missing Required Parameter 'fields'");
         });
     });

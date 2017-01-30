@@ -1,6 +1,6 @@
 import * as chai from "chai";
-import {Message} from "../../common/Message"
-import * as slackDestination from "./index"
+import {Message} from "../../common/Message";
+import * as slackDestination from "./index";
 
 describe("destinations-slack", () => {
     describe("preparePostBody()", () => {
@@ -25,12 +25,12 @@ describe("destinations-slack", () => {
 
             const expectedPostBody = {
                 username: "ASource",
-                color: 'danger',
+                color: "danger",
                 icon_url: "Some url",
                 text: "AKey: SomeValue\nAnotherKey: SomeOtherValue"
-            }
+            };
 
-            const postBody = slackDestination.preparePostBody(message)
+            const postBody = slackDestination.preparePostBody(message);
 
 
             chai.assert.deepEqual(postBody, expectedPostBody);

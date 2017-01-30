@@ -1,11 +1,11 @@
 import "babel-polyfill";
 
-import * as zlib from 'zlib';
+import * as zlib from "zlib";
 
-import * as awslambda from 'aws-lambda';
-import {MessageSender} from '../../common/MessageSender';
-import {Message, Field} from '../../common/Message';
-import {CloudWatchLogsEvent, CloudWatchLogsLogEvent, CloudWatchLogsDecodedData, CloudTrailRecord} from '../../common/LambdaEvents'
+import * as awslambda from "aws-lambda";
+import {MessageSender} from "../../common/MessageSender";
+import {Message, Field} from "../../common/Message";
+import {CloudWatchLogsEvent, CloudWatchLogsDecodedData, CloudTrailRecord} from "../../common/LambdaEvents";
 
 const topicARN = process.env.SNS_TOPIC;
 const messageSender = new MessageSender(topicARN);
@@ -55,7 +55,7 @@ async function handlerAsync(event: CloudWatchLogsEvent): Promise<void> {
 }
 
 export async function unpackCloudWatchLogsDecodedData(event: CloudWatchLogsEvent): Promise<CloudWatchLogsDecodedData> {
-    const payload = new Buffer(event.awslogs.data, 'base64');
+    const payload = new Buffer(event.awslogs.data, "base64");
     const unzipped = await new Promise<string>((resolve, reject)  => {
         zlib.gunzip(payload, (error, result) => {
             if (error) {
@@ -63,7 +63,7 @@ export async function unpackCloudWatchLogsDecodedData(event: CloudWatchLogsEvent
                 reject(error);
             }
 
-            resolve((result as Buffer).toString('utf8'));
+            resolve((result as Buffer).toString("utf8"));
         });
     });
 
@@ -83,7 +83,7 @@ export function prepareMessageFromCloudTrailRecord(cloudtrailLog: CloudTrailReco
         }
     }).filter(x => !!x);
 
-    // If there's no relevant fields, there's no way to make a subject, and no reason to send produce a message
+    // If there's no relevant fields, there"s no way to make a subject, and no reason to send produce a message
     if (fields) {
         const subject = fields[0].key + ": " + fields[0].value;
 
@@ -93,7 +93,7 @@ export function prepareMessageFromCloudTrailRecord(cloudtrailLog: CloudTrailReco
     return null;
 }
 
-export function messageFromSubjectAndFields(subject:string, fields: Field[]): Message {
+export function messageFromSubjectAndFields(subject: string, fields: Field[]): Message {
     return new Message({
         subject: subject,
         fields: fields,
@@ -105,5 +105,5 @@ export function messageFromSubjectAndFields(subject:string, fields: Field[]): Me
 }
 
 export function getValueFromObjectPath(object: any, path: string): string {
-    return path.split(".").reduce((object: any, path: string): string => object ? object[path] : null, object)
+    return path.split(".").reduce((object: any, path: string): string => object ? object[path] : null, object);
 }
