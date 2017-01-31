@@ -102,6 +102,7 @@ Resources:
             Ref: "SNSTopic"
   SourceCloudtrailCloudwatchLogsPermission:
     Type: "AWS::Lambda::Permission"
+    Condition: CloudTrailConfigured
     Properties:
       FunctionName:
         !GetAtt SourceCloudtrailCloudwatchLogsLambda.Arn
@@ -112,6 +113,17 @@ Resources:
         Ref: "AWS::AccountId"
       SourceArn:
         !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:${CloudTrailCloudWatchLogsGroupName}:*"
+  CloudWatchLogsSubscriptionFilter:
+    Type: "AWS::Logs::SubscriptionFilter"
+    Condition: CloudTrailConfigured
+    Properties:
+      DestinationArn:
+        !GetAtt SourceCloudtrailCloudwatchLogsLambda.Arn
+      FilterPattern:
+        Ref: CloudTrailCloudWatchLogsFilterPattern
+      LogGroupName:
+        Ref: CloudTrailCloudWatchLogsGroupName
+    DependsOn: SourceCloudtrailCloudwatchLogsPermission
   DestinationSlackLambda:
     Type: "AWS::Serverless::Function"
     Properties:
@@ -152,14 +164,3 @@ Resources:
       Endpoint:
         !GetAtt DestinationSlackLambda.Arn
       Protocol: lambda
-  CloudWatchLogsSubscriptionFilter:
-    Type: "AWS::Logs::SubscriptionFilter"
-    Condition: CloudTrailConfigured
-    Properties:
-      DestinationArn:
-        !GetAtt SourceCloudtrailCloudwatchLogsLambda.Arn
-      FilterPattern:
-        Ref: CloudTrailCloudWatchLogsFilterPattern
-      LogGroupName:
-        Ref: CloudTrailCloudWatchLogsGroupName
-    DependsOn: SourceCloudtrailCloudwatchLogsPermission
