@@ -88,9 +88,12 @@ If you want to customize your installation, you can do so by following the [Buil
 
 ## Contributing
 
-We'd love for you to help improve Activity Aware IDS for AWS. If you find an issue with Activity Aware IDS for AWS or
-you'd like to make a code contribution, please create an issue for it, so that we might be able to offer guidance or
-suggestions to improve your experience.
+We'd love for you to help improve Activity Aware IDS for AWS. We suggest checking out our
+[Contributing Guide](https://github.com/Giftbit/activity-aware-ids-aws/blob/master/CONTRIBUTING.md), as it will improve
+the likelihood of a successful contribution, and therefore a good experience.
+
+If you find an issue with Activity Aware IDS for AWS or you'd like to make a code contribution, please create an issue
+for it, so that we might be able to offer guidance or suggestions to improve your experience.
 
 
 ## Development
