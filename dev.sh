@@ -4,8 +4,6 @@
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd $SCRIPT_DIR
 
-set -x
-
 # A few bash commands to make development against dev environment easy.
 # Set the two properties below to sensible values for your project.
 
