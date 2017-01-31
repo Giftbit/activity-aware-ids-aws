@@ -7,7 +7,8 @@ the activities being performed in your AWS account. AWS Activity Aware provides 
 intrusion detection and awareness strategy by gathering important information about the activities in your AWS account,
 and bringing them to your team in the context that makes the most sense for them, such as Slack.
 
-In our initial release, we support CloudWatch Logs CloudTrail source, and the Slack destination.
+In our initial release, we support CloudWatch Logs CloudTrail source, and the Slack destination, with plan to add
+additional sources and destinations in the future.
 
 
 ## Use Cases
