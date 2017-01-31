@@ -14,20 +14,9 @@ additional sources and destinations in the future.
 ## Table of Contents
 
 1. [Use Cases](#use-cases)
-    1. [Intrusion Detection](#intrusion-detection)
-    2. [Least Privilege Debugging](#least-privilege-debugging)
 2. [Getting Started](#getting-started)
-    1. [Requirements](#requirements)
-    2. [CloudFormation Quick Install](#cloudformation-quick-install)
-    3. [Custom Install](#custom-installation)
 3. [Contributing](#contributing)
 4. [Development](#development)
-    1. [Building](#building)
-    2. [Creating a Dev Stack](#creating-a-dev-stack)
-    3. [Invoking a Source Function](#invoking-a-source-function)
-    4. [Deploying](#deploying)
-    5. [Updating a Function](#updating-a-function)
-    6. [Packaging](#packaging)
 5. [Notices](#notices)
 
 
