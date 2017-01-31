@@ -68,7 +68,7 @@ elif [ "$COMMAND" = "deploy" ] || [ "$COMMAND" = "package" ] || [ "$COMMAND" = "
 
     if [ "$COMMAND" = "deploy" ]; then
         echo "Executing aws cloudformation deploy..."
-        aws cloudformation deploy --template-file /tmp/Activity-Aware-IDS.yaml --stack-name $STACK_NAME --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM ${@:2}
+        aws cloudformation deploy --template-file /tmp/Activity-Aware-IDS.yaml --stack-name $STACK_NAME --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM --parameter-overrides CloudTrailCloudWatchLogsGroupName="" ${@:2}
 
         if [ $? -ne 0 ]; then
             # Print some help on why it failed.
