@@ -7,11 +7,6 @@ the activities being performed in your AWS account. AWS Activity Aware provides 
 intrusion detection and awareness strategy by gathering important information about the activities in your AWS account,
 and bringing them to your team in the context that makes the most sense for them, such as Slack.
 
-At its heart Activity Aware IDS for AWS is a series of specialized lambda functions. These functions fall into two different
-groups: **Sources** are functions that receive notifications for specific types of events, like CloudTrail, standardize
-this information; and **Destinations**, functions that receive the standardized information, and distribute them
-to specific places, such as Slack.
-
 In our initial release, we support CloudWatch Logs CloudTrail source, and the Slack destination.
 
 
@@ -115,11 +110,11 @@ AWS Activity Aware IDS for AWS is comprised mainly of lambda functions (inside `
 other AWS Resources (defined by the CloudFormation Template `infrastructure/cloudformation.yaml`). The lambda functions
 themselves are split into two types: **Sources** and **Destinations**.
 
-Sources are the recipient functions of events in an AWS account. They take these events, and convert them into a
-a standardized message format expected by the destination lambdas.
+**Sources** are the recipient functions of events in an AWS account. They take these events, like CloudTrail, and
+convert them into a standardized message format expected by the destination lambdas.
 
-Destinations receive the standardized message format, and convert it into the format for a specific destination, then
-send the message to that destination.
+**Destinations** receive the standardized messages, and convert it into the format for a specific destination, then
+handle the distribution of these to the specific systems, suck as Slack.
 
 ### Building
 
