@@ -11,6 +11,26 @@ In our initial release, we support CloudWatch Logs CloudTrail source, and the Sl
 additional sources and destinations in the future.
 
 
+## Table of Contents
+
+1. [Use Cases](#use-cases)
+    1. [Intrusion Detection](#intrusion-detection)
+    2. [Least Privilege Debugging](#least-privilege-debugging)
+2. [Getting Started](#getting-started)
+    1. [Requirements](#requirements)
+    2. [CloudFormation Quick Install](#cloudformation-quick-install)
+    3. [Custom Install](#custom-installation)
+3. [Contributing](#contributing)
+4. [Development](#development)
+    1. [Building](#building)
+    2. [Creating a Dev Stack](#creating-a-dev-stack)
+    3. [Invoking a Source Function](#invoking-a-source-function)
+    4. [Deploying](#deploying)
+    5. [Updating a Function](#updating-a-function)
+    6. [Packaging](#packaging)
+5. [Notices](#notices)
+
+
 ## Use Cases
 
 ### Intrusion Detection
@@ -138,7 +158,7 @@ Once you've performed a build, create a Development CloudFormation stack using
 This creates a new Stack called `Activity-Aware-IDS-Dev`. You should never develop against your primary
 `Activity-Aware-IDS` stack, as you may miss important events that occur on your account.
 
-### Invoking a Source
+### Invoking a Source Function
 
 While performing Development, it's frequently helpful to be able to invoke your sources to ensure that the proper
 behavior occurs. You can do this by running
@@ -148,7 +168,7 @@ behavior occurs. You can do this by running
 This will execute the lambda, as though an event with the given json just occurred. Your source should then standardize
 the event into a message which it will pass to your destinations.
 
-### Deployment
+### Deploying
 
 As you make changes to your resources, you can deploy these changes to your CloudFormation stack using
 `./dev.sh deploy`.
@@ -156,7 +176,7 @@ As you make changes to your resources, you can deploy these changes to your Clou
 This takes the current distribution resources, and the CloudFormation template, packages them, and then updates the
 stack with the new template.
 
-### Uploading a function
+### Updating a function
 
 As you're developing in Activity Aware IDS, you may want to update just a single function as deploying the
 CloudFormation template will likely involve updating all the functions, and this will take a greater about of time.
