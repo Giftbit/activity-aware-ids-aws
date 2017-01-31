@@ -37,9 +37,7 @@ export function prepareEmailOptions(message: Message): AWS.SES.Types.SendEmailRe
 
     return {
         Destination: {
-            ToAddresses: [
-                emails
-            ]
+            ToAddresses: emails
         },
         Message: {
             Body: {
