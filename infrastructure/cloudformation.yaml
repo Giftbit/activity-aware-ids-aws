@@ -107,7 +107,7 @@ Resources:
     Type: "AWS::SNS::Topic"
     Properties:
       DisplayName: AWS Aware Notifications
-  CloudTrailTranslatorRole:
+  SourceCloudtrailCloudwatchLogsRole:
     Type: "AWS::IAM::Role"
     Properties:
       AssumeRolePolicyDocument:
@@ -120,7 +120,7 @@ Resources:
             Principal:
               Service:
                 - "lambda.amazonaws.com"
-  CloudTrailTranslatorPolicy:
+  SourceCloudtrailCloudwatchLogsPolicy:
     Type: "AWS::IAM::Policy"
     Properties:
       PolicyName: "GiftbitCloudTrailTranslator"
@@ -144,13 +144,13 @@ Resources:
                 Ref: "SNSTopic"
       Roles:
         -
-          Ref: "CloudTrailTranslatorRole"
-  CloudTrailTranslatorLambda:
+          Ref: "SourceCloudtrailCloudwatchLogsRole"
+  SourceCloudtrailCloudwatchLogsLambda:
     Type: "AWS::Serverless::Function"
     Properties:
       Description: Converts CloudTrail CloudWatch Logs events into a form acceptable to the Notifiers via SNS
       Role:
-        !GetAtt CloudTrailTranslatorRole.Arn
+        !GetAtt SourceCloudtrailCloudwatchLogsRole.Arn
       Handler: index.handler
       Runtime: nodejs4.3
       Timeout: 15
@@ -159,11 +159,11 @@ Resources:
         Variables:
           SNS_TOPIC:
             Ref: "SNSTopic"
-  CloudTrailTranslatorCloudWatchLogsPermission:
+  SourceCloudtrailCloudwatchLogsPermission:
     Type: "AWS::Lambda::Permission"
     Properties:
       FunctionName:
-        !GetAtt CloudTrailTranslatorLambda.Arn
+        !GetAtt SourceCloudtrailCloudwatchLogsLambda.Arn
       Action: "lambda:InvokeFunction"
       Principal:
         !Sub "logs.${AWS::Region}.amazonaws.com"
@@ -171,7 +171,7 @@ Resources:
         Ref: "AWS::AccountId"
       SourceArn:
         !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:${CloudTrailCloudWatchLogsGroupName}:*"
-  SlackNotificationSenderRole:
+  DestinationSlackRole:
     Type: "AWS::IAM::Role"
     Properties:
       AssumeRolePolicyDocument:
@@ -184,7 +184,7 @@ Resources:
             Principal:
               Service:
                 - "lambda.amazonaws.com"
-  SlackNotificationSenderPolicy:
+  DestinationSlackPolicy:
     Type: "AWS::IAM::Policy"
     Properties:
       PolicyName: "GiftbitSlackNotificationSender"
@@ -208,13 +208,13 @@ Resources:
                 !GetAtt StackKey.Arn
       Roles:
         -
-          Ref: "SlackNotificationSenderRole"
-  SlackNotificationSenderLambda:
+          Ref: "DestinationSlackRole"
+  DestinationSlackLambda:
     Type: "AWS::Serverless::Function"
     Properties:
       Description: Sends Notifications from the subscribed SNS Topic to Slack
       Role:
-        !GetAtt SlackNotificationSenderRole.Arn
+        !GetAtt DestinationSlackRole.Arn
       Handler: index.handler
       Runtime: nodejs4.3
       Timeout: 15
@@ -223,7 +223,7 @@ Resources:
         Variables:
           SLACK_WEBHOOK_URL:
             !GetAtt EncryptedSlackWebhookURL.CipherText
-  SNSTopicSlackNotificationLambdaInvokePermission:
+  SNSTopicDestinationSlackLambdaInvokePermission:
     Type: "AWS::Lambda::Permission"
     Properties:
       Action: "lambda:InvokeFunction"
@@ -231,23 +231,23 @@ Resources:
       SourceArn:
         Ref: "SNSTopic"
       FunctionName:
-        !GetAtt SlackNotificationSenderLambda.Arn
-  SlackNotificationSNSSubscription:
+        !GetAtt DestinationSlackLambda.Arn
+  DestinationSlackSNSSubscription:
     Type: "AWS::SNS::Subscription"
     Properties:
       TopicArn:
         Ref: "SNSTopic"
       Endpoint:
-        !GetAtt SlackNotificationSenderLambda.Arn
+        !GetAtt DestinationSlackLambda.Arn
       Protocol: lambda
   CloudWatchLogsSubscriptionFilter:
     Type: "AWS::Logs::SubscriptionFilter"
     Condition: CloudTrailConfigured
     Properties:
       DestinationArn:
-        !GetAtt CloudTrailTranslatorLambda.Arn
+        !GetAtt SourceCloudtrailCloudwatchLogsLambda.Arn
       FilterPattern:
         Ref: CloudTrailCloudWatchLogsFilterPattern
       LogGroupName:
         Ref: CloudTrailCloudWatchLogsGroupName
-    DependsOn: CloudTrailTranslatorCloudWatchLogsPermission
+    DependsOn: SourceCloudtrailCloudwatchLogsPermission
