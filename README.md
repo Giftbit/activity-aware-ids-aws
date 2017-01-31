@@ -65,21 +65,22 @@ CloudTrail logs the denial to the CloudWatch Logs Log Group, the CloudTrail Sour
 standardized version to the Slack Destination, which will send a notification to its configured Slack Channel. At this
 point, you can review the denied action, and resource, and add these to the permissions of the role.
 
+## Getting Started
 
-## Requirements
+### Requirements
 
-We assume that you already have CloudTrail installed and set up, and that you have configured
-[CloudTrail logs to push to CloudWatch Logs](http://docs.aws.amazon.com/awscloudtrail/latest/userguide/send-cloudtrail-events-to-cloudwatch-logs.html).
+To receive Cloudtrail Events, Activity Aware IDS for AWS requires that 
+[CloudWatch Logs support in Cloudtrail](http://docs.aws.amazon.com/awscloudtrail/latest/userguide/send-cloudtrail-events-to-cloudwatch-logs.html)
+has been enabled.
 
-You will also need a [Slack Webhook URL](https://slack.com/apps/A0F7XDUAZ-incoming-webhooks) that will be used to
-notify your Slack channel.
-
-
-## Installing Activity Aware IDS for AWS
+To send notifications to Slack, you will need a
+[Slack Webhook URL](https://slack.com/apps/A0F7XDUAZ-incoming-webhooks).
 
 ### CloudFormation Quick Install
 
-If you want to get started quickly, you can use CloudFormation to quickly bootstrap your infrastructure.
+We have packaged the lambda functions with a build of a CloudFormation template that will enable you to quickly install
+Activity Aware IDS for AWS. This will install all of the required Lambda functions, set up the required infrastructure
+and permissions, and wire up the events between the infrastructure, and the lambda functions.
 
 [![Launch Giftbit AWS Activity Aware using CloudFormation](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?#/stacks/new?stackName=AWS-Activity-Aware&templateURL=https://s3-us-west-2.amazonaws.com/giftbit-public-resources/cloudformation/aws-activity-aware/cloudformation/20161223-1823.yaml)
 
