@@ -96,6 +96,44 @@ We'd love for you to help improve Activity Aware IDS for AWS. If you find an iss
 you'd like to make a code contribution, please create an issue for it, so that we might be able to offer guidance or
 suggestions to improve your experience.
 
+## Development
+
+```
+.
+├── infrastructure
+│   └── cloudformation.yaml
+├── scripts
+│   └── package.sh
+└── src
+    ├── common
+    │   └── ...
+    └── lambdas
+        └── ...
+```
+
+AWS Activity Aware IDS for AWS is comprised mainly of lambda functions (inside `src/lambdas`) and their connection with
+other AWS Resources (defined by the CloudFormation Template `infrastructure/cloudformation.yaml`). The lambda functions
+themselves are split into two types: **Sources** and **Destinations**. 
+
+Sources are the recipient functions of events in an AWS account. They take these events, and convert them into a
+a standardized message format expected by the destination lambdas. 
+
+Destinations receive the standardized message format, and convert it into the format for a specific destination, then
+send the message to that destination.
+ 
+### Building
+ 
+Compile the project with: `npm run build`
+
+Each of the lambda functions in `src/lambdas` will be build separately and packaged with it's dependencies in a zip file
+in the `dist` folder. Only the source code, and dependencies referenced by each lambda will be included.
+
+
+### Deployment
+
+
+ 
+
 ## Notices
 
 This software the
