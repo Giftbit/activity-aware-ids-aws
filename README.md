@@ -74,6 +74,7 @@ We assume that you already have CloudTrail installed and set up, and that you ha
 You will also need a [Slack Webhook URL](https://slack.com/apps/A0F7XDUAZ-incoming-webhooks) that will be used to
 notify your Slack channel.
 
+
 ## Installing Activity Aware IDS for AWS
 
 ### CloudFormation Quick Install
@@ -82,19 +83,18 @@ If you want to get started quickly, you can use CloudFormation to quickly bootst
 
 [![Launch Giftbit AWS Activity Aware using CloudFormation](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?#/stacks/new?stackName=AWS-Activity-Aware&templateURL=https://s3-us-west-2.amazonaws.com/giftbit-public-resources/cloudformation/aws-activity-aware/cloudformation/20161223-1823.yaml)
 
-### Full Installation
+### Custom Installation
 
-If you want to get more into the details of what this system is doing (and I think it's worthwhile to do so), you can
-check out the
-[CloudFormation Template](https://github.com/Giftbit/giftbit-aws-activity-aware/blob/master/aws-activity-aware.yaml).
-We'd recommend that if you're going to deploy this on your own infrastructure, you should use some form of automation
-to do this, and this template should give you a good starting point.
+If you want to customize your installation, you can do so by following the [Building](#building) and 
+[Packaging](#packaging) sections of the [Development](#development) section below.
+
 
 ## Contributing
 
 We'd love for you to help improve Activity Aware IDS for AWS. If you find an issue with Activity Aware IDS for AWS or
 you'd like to make a code contribution, please create an issue for it, so that we might be able to offer guidance or
 suggestions to improve your experience.
+
 
 ## Development
 
@@ -129,7 +129,6 @@ Compile the project with:
 Each of the lambda functions in `src/lambdas` will be build separately and packaged with it's dependencies in a zip file
 in the `dist` folder. Only the source code, and dependencies referenced by each lambda will be included.
 
-
 ### Creating a Dev Stack
 
 Once you've performed a build, create a Development CloudFormation stack using 
@@ -138,7 +137,6 @@ Once you've performed a build, create a Development CloudFormation stack using
 
 This creates a new Stack called `Activity-Aware-IDS-Dev`. You should never develop against your primary 
 `Activity-Aware-IDS` stack, as you may miss important events that occur on your account.
-
 
 ### Invoking a Source
 
@@ -150,7 +148,6 @@ behavior occurs. You can do this by running
 This will execute the lambda, as though an event with the given json just occurred. Your source should then standardize
 the event into a message which it will pass to your destinations.
 
-
 ### Deployment
 
 As you make changes to your resources, you can deploy these changes to your CloudFormation stack using 
@@ -159,12 +156,29 @@ As you make changes to your resources, you can deploy these changes to your Clou
 This takes the current distribution resources, and the CloudFormation template, packages them, and then updates the
 stack with the new template.
 
-
 ### Uploading a function
 
-As you're developing in Activity Aware IDS, you may want to update just a single function ...
+As you're developing in Activity Aware IDS, you may want to update just a single function as deploying the
+CloudFormation template will likely involve updating all the functions, and this will take a greater about of time.
 
+To deploy a specific function you can run
+
+`./dev upload <function_name>`
+
+This will build this function, package the deployment package, and update the associated function, without updating the
+other CloudFormation resources.
+
+### Packaging
  
+To package the functions, as well as the CloudFormation template, you can run
+
+`./dev package`
+
+This packages the lambda functions, deploys them to S3 artifact bucket, generates a CloudFormation template with the
+Lambda deployment package resources, and finally uploads the CloudFormation template to S3.
+
+By packaging the resources, it allows for easily creating CloudFormation Stacks in multiple accounts, such as we have
+demonstrated in [CloudFormation Quick Install](#cloudformation-quick-install).
 
 ## Notices
 
