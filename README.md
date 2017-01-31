@@ -160,7 +160,8 @@ the event into a message which it will pass to your destinations.
 ### Deploying
 
 As you make changes to your resources, you can deploy these changes to your CloudFormation stack using
-`./dev.sh deploy`.
+
+`./dev.sh deploy`
 
 This takes the current distribution resources, and the CloudFormation template, packages them, and then updates the
 stack with the new template.
