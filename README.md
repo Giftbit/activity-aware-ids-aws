@@ -102,8 +102,7 @@ suggestions to improve your experience.
 .
 ├── infrastructure
 │   └── cloudformation.yaml
-├── scripts
-│   └── package.sh
+├── dev.sh
 └── src
     ├── common
     │   └── ...
@@ -123,14 +122,47 @@ send the message to that destination.
  
 ### Building
  
-Compile the project with: `npm run build`
+Compile the project with: 
+
+`./dev.sh build`
 
 Each of the lambda functions in `src/lambdas` will be build separately and packaged with it's dependencies in a zip file
 in the `dist` folder. Only the source code, and dependencies referenced by each lambda will be included.
 
 
+### Creating a Dev Stack
+
+Once you've performed a build, create a Development CloudFormation stack using 
+
+`./dev.sh create`. 
+
+This creates a new Stack called `Activity-Aware-IDS-Dev`. You should never develop against your primary 
+`Activity-Aware-IDS` stack, as you may miss important events that occur on your account.
+
+
+### Invoking a Source
+
+While performing Development, it's frequently helpful to be able to invoke your sources to ensure that the proper
+behavior occurs. You can do this by running
+
+`./dev.sh invoke <function_directory_name> <json file to invoke with>`
+
+This will execute the lambda, as though an event with the given json just occurred. Your source should then standardize
+the event into a message which it will pass to your destinations.
+
+
 ### Deployment
 
+As you make changes to your resources, you can deploy these changes to your CloudFormation stack using 
+`./dev.sh deploy`.
+
+This takes the current distribution resources, and the CloudFormation template, packages them, and then updates the
+stack with the new template.
+
+
+### Uploading a function
+
+As you're developing in Activity Aware IDS, you may want to update just a single function ...
 
  
 
