@@ -173,7 +173,7 @@ CloudFormation template will likely involve updating all the functions, and this
 
 To deploy a specific function you can run
 
-`./dev upload <function_name>`
+`./dev.sh upload <function_name>`
 
 This will build this function, package the deployment package, and update the associated function, without updating the
 other CloudFormation resources.
@@ -182,7 +182,7 @@ other CloudFormation resources.
 
 To package the functions, as well as the CloudFormation template, you can run
 
-`./dev package`
+`./dev.sh package`
 
 This packages the lambda functions, deploys them to S3 artifact bucket, generates a CloudFormation template with the
 Lambda deployment package resources, and finally uploads the CloudFormation template to S3.
