@@ -81,6 +81,33 @@ has been enabled.
 To send notifications to Slack, you will need a
 [Slack Webhook URL](https://slack.com/apps/A0F7XDUAZ-incoming-webhooks).
 
+### Configuration
+
+#### CloudTrailCloudWatchLogsGroupName
+
+This specifies the CloudWatch Logs Log Group from your account that you would like Activity Aware IDS to monitor the
+CloudTrail events in your account.
+
+Default: `CloudTrail/DefaultLogGroup`
+
+The default is set to the default used by CloudTrail when sending logs to CloudWatch Logs.
+
+#### CloudTrailCloudWatchLogsFilterPattern
+
+This specifies the CloudWatch Logs [Filter Pattern][filter and pattern syntax] for events you would like the CloudTrail
+Source to receive. More detail on the filter format can be found in the
+[Filter and Pattern Syntax][filter and pattern syntax] documentation.
+
+Default: `{ ($.errorCode = "*UnauthorizedOperation") || ($.errorCode = "AccessDenied*") }`
+
+The Default value will send you alerts whenever an access denied error is logged by CloudTrail.
+
+Additional examples of common filter patterns for specific CloudTrail events can be found in the
+[CloudWatch Alarms for CloudTrail][cloudtrail alarms] documentation.
+
+[filter and pattern syntax]: http://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/FilterAndPatternSyntax.html
+[cloudtrail alarms]: http://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudwatch-alarms-for-cloudtrail.html
+
 ### CloudFormation Quick Install
 
 We have packaged the lambda functions with a build of a CloudFormation template that will enable you to quickly install
