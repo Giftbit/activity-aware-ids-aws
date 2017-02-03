@@ -2,7 +2,6 @@
 
 AWSTemplateFormatVersion: "2010-09-09"
 Description: Notifies on activity in your AWS account
-Transform: "AWS::Serverless-2016-10-31"
 Parameters:
   CloudTrailCloudWatchLogsGroupName:
     Type: String
@@ -42,27 +41,46 @@ Resources:
         !Sub "alias/${AWS::StackName}-Key"
       TargetKeyId:
         !GetAtt StackKey.Arn
-  EncryptionLambda:
-    Type: "AWS::Serverless::Function"
+  EncryptionLambdaRole:
+    Type: "AWS::IAM::Role"
     Properties:
-      Description: Backs a CloudFormation Custom Resource for encypting values with a specified KMS Key
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Effect: "Allow"
+            Action:
+              - "sts:AssumeRole"
+            Principal:
+              Service:
+                - "lambda.amazonaws.com"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
       Policies:
         -
-          Version: "2012-10-17"
-          Statement:
-            -
-              Effect: "Allow"
-              Action:
-                - "kms:Encrypt"
-                - "kms:DescribeKey"
-                - "kms:GenerateDataKey"
-              Resource:
-                -
-                  !GetAtt StackKey.Arn
+          PolicyName: "EncryptionLambda"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              -
+                Effect: "Allow"
+                Action:
+                  - "kms:Encrypt"
+                  - "kms:DescribeKey"
+                  - "kms:GenerateDataKey"
+                Resource:
+                  -
+                    !GetAtt StackKey.Arn
+  EncryptionLambda:
+    Type: "AWS::Lambda::Function"
+    Properties:
+      Description: Backs a CloudFormation Custom Resource for encypting values with a specified KMS Key
+      Role:
+        !GetAtt EncryptionLambdaRole.Arn
       Handler: lambda_function.lambda_handler
       Runtime: python2.7
       Timeout: 15
-      CodeUri: "s3://giftbit-public-resources/cloudformation/lambda-backed-cloud-formation-kms-encryption/lambda/20170102-1440.zip"
+      Code: "s3://giftbit-public-resources/cloudformation/lambda-backed-cloud-formation-kms-encryption/lambda/20170102-1440.zip"
   EncryptedSlackWebhookURL:
     Type: "AWS::CloudFormation::CustomResource"
     Version: "1.0"
@@ -77,25 +95,44 @@ Resources:
     Type: "AWS::SNS::Topic"
     Properties:
       DisplayName: AWS Aware Notifications
+  SourceCloudtrailCloudwatchLogsLambdaRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Effect: "Allow"
+            Action:
+              - "sts:AssumeRole"
+            Principal:
+              Service:
+                - "lambda.amazonaws.com"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+      Policies:
+        -
+          PolicyName: "SourceCloudtrailCloudwatchLogsLambdaRole"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              -
+                Effect: "Allow"
+                Action:
+                  - "sns:Publish"
+                Resource:
+                  -
+                    Ref: "SNSTopic"
   SourceCloudtrailCloudwatchLogsLambda:
-    Type: "AWS::Serverless::Function"
+    Type: "AWS::Lambda::Function"
     Properties:
       Description: Converts CloudTrail CloudWatch Logs events into a form acceptable to the Notifiers via SNS
+      Role:
+        !GetAtt SourceCloudtrailCloudwatchLogsLambdaRole.Arn
       Handler: index.handler
       Runtime: nodejs4.3
       Timeout: 15
-      CodeUri: ../dist/sources-cloudtrail-cloudwatch-logs/sources-cloudtrail-cloudwatch-logs.zip
-      Policies:
-        -
-          Version: "2012-10-17"
-          Statement:
-            -
-              Effect: "Allow"
-              Action:
-                - "sns:Publish"
-              Resource:
-                -
-                  Ref: "SNSTopic"
+      Code: ../dist/sources-cloudtrail-cloudwatch-logs/sources-cloudtrail-cloudwatch-logs.zip
       Environment:
         Variables:
           SNS_TOPIC:
@@ -124,25 +161,44 @@ Resources:
       LogGroupName:
         Ref: CloudTrailCloudWatchLogsGroupName
     DependsOn: SourceCloudtrailCloudwatchLogsPermission
+  DestinationSlackLambdaRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Effect: "Allow"
+            Action:
+              - "sts:AssumeRole"
+            Principal:
+              Service:
+                - "lambda.amazonaws.com"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+      Policies:
+        -
+          PolicyName: "DestinationSlackLambdaRole"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              -
+                Effect: "Allow"
+                Action:
+                  - "kms:decrypt"
+                Resource:
+                  -
+                    !GetAtt StackKey.Arn
   DestinationSlackLambda:
-    Type: "AWS::Serverless::Function"
+    Type: "AWS::Lambda::Function"
     Properties:
       Description: Sends Notifications from the subscribed SNS Topic to Slack
+      Role:
+        !GetAtt DestinationSlackLambdaRole.Arn
       Handler: index.handler
       Runtime: nodejs4.3
       Timeout: 15
-      CodeUri: ../dist/destinations-slack/destinations-slack.zip
-      Policies:
-        -
-          Version: "2012-10-17"
-          Statement:
-            -
-              Effect: "Allow"
-              Action:
-                - "kms:decrypt"
-              Resource:
-                -
-                  !GetAtt StackKey.Arn
+      Code: ../dist/destinations-slack/destinations-slack.zip
       Environment:
         Variables:
           SLACK_WEBHOOK_URL:
