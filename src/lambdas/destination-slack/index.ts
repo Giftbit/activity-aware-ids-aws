@@ -39,7 +39,7 @@ export async function handlerAsync(event: SNSEvent): Promise<string> {
 export function preparePostBody(message: Message): any {
     console.log("preparePostBody, payload:", JSON.stringify(message));
 
-    const slackText = message.fields.map(field => field.key + ": " + field.value).join("\n");
+    const slackText = message.fields.map(field => field.key + ": " + JSON.stringify(field.value, null, 2)).join("\n");
 
     let slackBody = {
         username: message.metadata.sourceName,
