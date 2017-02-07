@@ -132,7 +132,7 @@ Resources:
       Handler: index.handler
       Runtime: nodejs4.3
       Timeout: 15
-      Code: ../dist/sources-cloudtrail-cloudwatch-logs/sources-cloudtrail-cloudwatch-logs.zip
+      Code: ../dist/source-cloudtrail-cloudwatch-logs/source-cloudtrail-cloudwatch-logs.zip
       Environment:
         Variables:
           SNS_TOPIC:
@@ -198,7 +198,7 @@ Resources:
       Handler: index.handler
       Runtime: nodejs4.3
       Timeout: 15
-      Code: ../dist/destinations-slack/destinations-slack.zip
+      Code: ../dist/destination-slack/destination-slack.zip
       Environment:
         Variables:
           SLACK_WEBHOOK_URL:
