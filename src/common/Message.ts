@@ -32,6 +32,8 @@ export class Message {
         sourceIconUrl?: string;
     };
 
+    tags: Tag[];
+
     constructor (obj: any) {
         const requiredFields = [
             "subject",
@@ -52,10 +54,24 @@ export class Message {
             this.metadata.sourceName = obj.metadata.sourceName;
             this.metadata.sourceIconUrl = obj.metadata.sourceIconUrl;
         }
+
+        this.tags = [];
+        if (obj.tags) {
+            obj.tags.forEach((tag) => {
+                if (tag.key && tag.value) {
+                    this.tags.push(tag);
+                }
+            })
+        }
     }
 }
 
 export interface Field {
+    key: string;
+    value: string;
+}
+
+export interface Tag {
     key: string;
     value: string;
 }

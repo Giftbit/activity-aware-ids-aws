@@ -16,14 +16,15 @@ describe("MessageSender", () => {
                 metadata: {
                     sourceName: "ASource",
                     sourceIconUrl: "Some url" // Not checked
-                }
+                },
+                tags:[]
             });
             const messageSender = new MessageSender("some:fake:arn");
 
             const publishInput = messageSender.preparePublishInput(message);
 
             const expectedPublishInput = {
-                Message: "{\"subject\":\"Some subject\",\"fields\":[{\"key\":\"aKey\",\"value\":\"SomeValue\"}],\"metadata\":{\"sourceName\":\"ASource\",\"sourceIconUrl\":\"Some url\"}}",
+                Message: "{\"subject\":\"Some subject\",\"fields\":[{\"key\":\"aKey\",\"value\":\"SomeValue\"}],\"metadata\":{\"sourceName\":\"ASource\",\"sourceIconUrl\":\"Some url\"},\"tags\":[]}",
                 TopicArn: "some:fake:arn"
             };
 

@@ -57,6 +57,14 @@ export function preparePostBody(message: Message): any {
         text: slackText
     };
 
+    if (message.tags) {
+        const preferredChannelTag = message.tags.find(tag => tag.key === "slack-preferred-channel");
+        if (preferredChannelTag) {
+            slackBody["channel"] = preferredChannelTag.value;
+        }
+    }
+
+
     if (message.metadata) {
         if (message.metadata.sourceName) {
             slackBody.username = message.metadata.sourceName;
