@@ -225,4 +225,4 @@ Outputs:
     Description: The Arn for the SNS Topic. Other systems can use this to send information to Activity Aware
     Value: !Ref SNSTopic
     Export:
-      Name: !Sub "${AWS::StackName}SNSTopic"
+      Name: !Sub "${AWS::StackName}-SNSTopic"
