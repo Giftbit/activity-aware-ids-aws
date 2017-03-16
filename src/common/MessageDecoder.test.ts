@@ -40,7 +40,8 @@ describe("MessageDecoder", () => {
                 metadata: {
                     sourceName: "ASource",
                     sourceIconUrl: "Some url" // Not checked
-                }
+                },
+                tags: []
             };
 
             const message: Message = messageDecoder.decodeMessageFromSNSEvent(event);

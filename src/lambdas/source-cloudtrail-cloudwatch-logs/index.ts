@@ -36,7 +36,7 @@ export function handler(event: any, context: awslambda.Context, callback: awslam
         .then(res => {
             callback(undefined, res);
         }, err => {
-            console.error("An unhandled Error occurred while executing the handler",JSON.stringify(err, null, 2));
+            console.error("An unhandled Error occurred while executing the handler", JSON.stringify(err, null, 2));
             callback(err);
         });
 }
