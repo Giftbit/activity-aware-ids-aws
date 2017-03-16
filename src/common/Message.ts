@@ -61,7 +61,7 @@ export class Message {
                 if (tag.key && tag.value) {
                     this.tags.push(tag);
                 }
-            })
+            });
         }
     }
 }

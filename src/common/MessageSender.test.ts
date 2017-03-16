@@ -17,7 +17,7 @@ describe("MessageSender", () => {
                     sourceName: "ASource",
                     sourceIconUrl: "Some url" // Not checked
                 },
-                tags:[]
+                tags: []
             });
             const messageSender = new MessageSender("some:fake:arn");
 
