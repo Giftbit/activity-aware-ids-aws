@@ -80,7 +80,9 @@ Resources:
       Handler: lambda_function.lambda_handler
       Runtime: python2.7
       Timeout: 15
-      Code: "s3://giftbit-public-resources/cloudformation/lambda-backed-cloud-formation-kms-encryption/lambda/20170102-1440.zip"
+      Code:
+        S3Bucket: "giftbit-public-resources"
+        S3Key: "cloudformation/lambda-backed-cloud-formation-kms-encryption/lambda/20170102-1440.zip"
   EncryptedSlackWebhookURL:
     Type: "AWS::CloudFormation::CustomResource"
     Version: "1.0"
