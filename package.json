@@ -22,6 +22,7 @@
   "devDependencies": {
     "@types/aws-lambda": "0.0.6",
     "@types/chai": "^3.4.34",
+    "@types/jmespath": "^0.15.0",
     "@types/mocha": "^2.2.38",
     "@types/node": "^7.0.0",
     "babel-core": "^6.22.1",
