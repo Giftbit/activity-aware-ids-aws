@@ -15,12 +15,12 @@ export function getTags(tagString: string, message: Message): Tag[] {
 }
 
 export function parseTags(tagString: string): Tag[] {
-    return tagString.split(',').map((pair) => {
-        const pieces = pair.split(':');
+    return tagString.split(",").map((pair) => {
+        const pieces = pair.split(":");
         return {
             key: pieces[0].trim(),
             value: pieces[1].trim()
-        }
+        };
     });
 }
 
