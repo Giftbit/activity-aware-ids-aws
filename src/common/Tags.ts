@@ -6,6 +6,15 @@ export interface Tag {
     value: string;
 }
 
+export function decorateMessageWithTags(message: Message, tagString: string, data: any): Message {
+    message.tags.push(...resolveTags(tagString, data));
+    return message;
+}
+
+export function resolveTags(tagString: string, data: any): Tag[] {
+    return resolveDynamicTagValues(parseTags(tagString),data);
+}
+
 export function parseTags(tagString: string): Tag[] {
     return tagString.split(",").map((pair) => {
         const pieces = pair.split(":");

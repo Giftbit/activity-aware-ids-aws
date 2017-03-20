@@ -122,4 +122,73 @@ describe("Tags", () => {
             chai.assert.deepEqual(result, expected);
         });
     });
+
+    describe("resolveTags", () => {
+        it("handles happy path", () => {
+            const tagString = "key1:value1,key2:${a.b}";
+            const data = {
+                a: {
+                    b: "value2"
+                }
+            };
+
+            const expected = [
+                {
+                    key: "key1",
+                    value: "value1"
+                },
+                {
+                    key: "key2",
+                    value: "value2"
+                }
+            ];
+
+            const result = tagsLib.resolveTags(tagString,data);
+            chai.assert.deepEqual(result, expected);
+        });
+    });
+
+    describe("decorateMessageWithTags", () => {
+        it("handles happy path", () => {
+            let pojo = {
+                subject: "Some subject",
+                fields: [
+                    {
+                        key: "aKey",
+                        value: "SomeValue"
+                    }
+                ],
+                metadata: {
+                    sourceName: "ASource",
+                    sourceIconUrl: "Some url" // Not checked
+                },
+                tags: [{key: "aKey", value: "aValue"}]
+            };
+            const message = new Message(pojo);
+            const tagString = "key1:value1,key2:${a.b}";
+            const data = {
+                a: {
+                    b: "value2"
+                }
+            };
+
+            pojo.tags = [
+                {
+                    key: "aKey",
+                    value: "aValue"
+                },
+                {
+                    key: "key1",
+                    value: "value1"
+                },
+                {
+                    key: "key2",
+                    value: "value2"
+                }
+            ];
+
+            const result = tagsLib.decorateMessageWithTags(message,tagString,data);
+            chai.assert.deepEqual(result, pojo);
+        });
+    });
 });
