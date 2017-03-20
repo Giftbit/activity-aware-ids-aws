@@ -6,12 +6,11 @@ export interface Tag {
     value: string;
 }
 
-export function applyTagsToMessage(tags: string, message: Message): Message {
-    return null;
-}
+export function applyTagsToMessage(tagString: string, message: Message): Message {
+    const tags = parseTags(tagString);
+    message.tags = tags;
 
-export function getTags(tagString: string, message: Message): Tag[] {
-    return null;
+    return message;
 }
 
 export function parseTags(tagString: string): Tag[] {
