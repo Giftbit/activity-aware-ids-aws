@@ -1,5 +1,5 @@
 {
-  "name": "activitiy-aware-ids-aws",
+  "name": "activity-aware-ids-aws",
   "version": "1.0.0",
   "description": "Activity Aware IDS for AWS is a system for gaining greater visibility into your AWS Account.",
   "scripts": {

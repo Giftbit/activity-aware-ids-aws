@@ -15,7 +15,8 @@ describe("Message", () => {
                 metadata: {
                     sourceName: "ASource",
                     sourceIconUrl: "Some url" // Not checked
-                }
+                },
+                tags: []
             };
 
             const message = new Message(pojo);
@@ -37,6 +38,8 @@ describe("Message", () => {
 
             const message = new Message(pojo);
 
+            pojo["tags"] = [];
+
             chai.assert.deepEqual(JSON.parse(JSON.stringify(message)), pojo);
         });
 
@@ -55,6 +58,7 @@ describe("Message", () => {
 
             // The message constructor will add the metadata object if it's missing
             pojo["metadata"] = {};
+            pojo["tags"] = [];
 
             chai.assert.deepEqual(JSON.parse(JSON.stringify(message)), pojo);
         });

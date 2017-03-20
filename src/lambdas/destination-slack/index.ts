@@ -20,7 +20,7 @@ export function handler(event: any, context: awslambda.Context, callback: awslam
         .then(res => {
             callback(undefined, res);
         }, err => {
-            console.error("An unhandled Error occurred while executing the handler",JSON.stringify(err, null, 2));
+            console.error("An unhandled Error occurred while executing the handler", JSON.stringify(err, null, 2));
             callback(err);
         });
 }
@@ -56,6 +56,14 @@ export function preparePostBody(message: Message): any {
         icon_url: message.metadata.sourceIconUrl,
         text: slackText
     };
+
+    if (message.tags) {
+        const preferredChannelTag = message.tags.find(tag => tag.key === "slack-preferred-channel");
+        if (preferredChannelTag) {
+            slackBody["channel"] = preferredChannelTag.value;
+        }
+    }
+
 
     if (message.metadata) {
         if (message.metadata.sourceName) {

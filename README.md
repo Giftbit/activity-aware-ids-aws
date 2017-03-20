@@ -114,7 +114,7 @@ We have packaged the lambda functions with a build of a CloudFormation template 
 Activity Aware IDS for AWS. This will install all of the required Lambda functions, set up the required infrastructure
 and permissions, and wire up the events between the infrastructure, and the lambda functions.
 
-[![Launch Giftbit AWS Activity Aware using CloudFormation](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?#/stacks/new?stackName=Activity-Aware-IDS&templateURL=https://activity-aware-ids-aws.s3.amazonaws.com/cloudformation/20170206-1601.yaml)
+[![Launch Giftbit AWS Activity Aware using CloudFormation](https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?#/stacks/new?stackName=Activity-Aware-IDS&templateURL=https://activity-aware-ids-aws.s3.amazonaws.com/cloudformation/20170317-1323.yaml)
 
 ### Custom Installation
 
