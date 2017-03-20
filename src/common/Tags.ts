@@ -1,16 +1,9 @@
-import * as jmespath from "./JMESPath";
 import {Message} from "./Message";
+import * as jmespath from 'jmespath'
 
 export interface Tag {
     key: string;
     value: string;
-}
-
-export function applyTagsToMessage(tagString: string, message: Message): Message {
-    const tags = parseTags(tagString);
-    message.tags = tags;
-
-    return message;
 }
 
 export function parseTags(tagString: string): Tag[] {
@@ -19,6 +12,29 @@ export function parseTags(tagString: string): Tag[] {
         return {
             key: pieces[0].trim(),
             value: pieces[1].trim()
+        };
+    });
+}
+
+export function resolveDynamicTagValues(tags: Tag[], data: any): Tag[] {
+    const re = /\${([^}]+)}/g;
+
+    return tags.map((tag: Tag) => {
+        let value = tag.value;
+        let match = null;
+        do {
+            match = re.exec(value);
+            if (match) {
+                const fullMatch = match[0];
+                const searchString = match[1];
+
+                value = value.replace(fullMatch, jmespath.search(data, searchString));
+            }
+        } while (match);
+
+        return {
+            key: tag.key,
+            value: value
         };
     });
 }

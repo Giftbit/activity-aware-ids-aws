@@ -48,30 +48,77 @@ describe("Tags", () => {
         });
     });
 
-    describe("applyTagsToMessage", () => {
-        it("handles happy path", () => {
-            const tagString = "key1:value1,key2:value2";
-            const message = new Message({
-                subject: "A Subject",
-                fields: []
-            });
+    describe("resolveDynamicTagValues", () => {
+        it("pathed values", () => {
+            const tags = [
+                {
+                    key: "key1",
+                    value: "value1"
+                },
+                {
+                    key: "key2",
+                    value: "${a.b}"
+                }
+            ];
+            const data = {
+                a: {
+                    b: "value2"
+                }
+            };
 
-            const expected = new Message({
-                subject: "A Subject",
-                fields: [],
-                tags: [
-                    {
-                        key: "key1",
-                        value: "value1"
-                    },
-                    {
-                        key: "key2",
-                        value: "value2"
-                    }
-                ]
-            });
+            const expected = [
+                {
+                    key: "key1",
+                    value: "value1"
+                },
+                {
+                    key: "key2",
+                    value: "value2"
+                }
+            ];
 
-            const result = tagsLib.applyTagsToMessage(tagString, message);
+            const result = tagsLib.resolveDynamicTagValues(tags,data);
+            chai.assert.deepEqual(result, expected);
+        });
+
+        it("conditional values", () => {
+            const tags = [
+                {
+                    key: "key1",
+                    value: "value1"
+                },
+                {
+                    key: "key2",
+                    value: "${a.b==`set` && `isSet` || `isNotSet`}"
+                },
+                {
+                    key: "key3",
+                    value: "${a.c==`set` && `isSet` || `isNotSet`}"
+                }
+            ];
+            const data = {
+                a: {
+                    b: "set",
+                    c: "notSet"
+                }
+            };
+
+            const expected = [
+                {
+                    key: "key1",
+                    value: "value1"
+                },
+                {
+                    key: "key2",
+                    value: "isSet"
+                },
+                {
+                    key: "key3",
+                    value: "isNotSet"
+                }
+            ];
+
+            const result = tagsLib.resolveDynamicTagValues(tags,data);
             chai.assert.deepEqual(result, expected);
         });
     });
